@@ -1,17 +1,35 @@
 {
-  "name": "TT-api",
+  "name": "tt-api",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/server.js",
+  "type": "module",
   "license": "MIT",
+  "scripts": {
+    "start": "nodemon src/server.ts"
+  },
+  "nodemonConfig": {
+    "ext": "ts, js, json",
+    "watch": [
+      "./src/"
+    ],
+    "execMap": {
+      "ts": "node --loader ts-node/esm.mjs --experimental-top-level-await --experimental-json-modules"
+    }
+  },
   "dependencies": {
-    "@types/axios": "^0.14.0",
-    "@types/bluebird": "^3.5.33",
     "@types/express": "^4.17.11",
-    "@types/node": "^15.0.0",
+    "@types/node": "^15.0.1",
     "@types/validator": "^13.1.3",
     "axios": "^0.21.1",
     "express": "^4.17.1",
-    "sequelizer": "^1.1.4",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.6.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7",
+    "sequelize-cli": "^6.2.0",
+    "ts-node": "^9.1.1",
+    "tslib": "^2.2.0",
     "typescript": "^4.2.4"
   }
 }

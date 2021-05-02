@@ -1,0 +1,2 @@
+--- É preciso usar node v14.5
+--- Por conta do setup com typecript, é preciso que as migrations estejam no formato cjs
