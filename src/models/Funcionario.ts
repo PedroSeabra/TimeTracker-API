@@ -3,7 +3,7 @@ import connection from '../database/index.js';
 
 const { STRING, DATEONLY, Model } = sequelize;
 
-interface FuncionarioI {
+export interface FuncionarioI {
   cpf: string;
   nome: string;
   dataCadastro: string;
