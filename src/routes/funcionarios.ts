@@ -3,12 +3,12 @@ import connection from '../database/index.js';
 import { Funcionario } from '../models/Funcionario.js';
 import { gerarSenha } from '../utils/auth.js';
 
-const routes = express.Router();
+const routesFuncionairos = express.Router();
 
 /**
  * Recuperação de todos os funcionários cadastrados
  */
-routes.get('/funcionarios', (req, res) => {
+routesFuncionairos.get('/funcionarios', (req, res) => {
   //Conexão com o banco de dados
   connection
     .authenticate()
@@ -28,7 +28,7 @@ routes.get('/funcionarios', (req, res) => {
     .catch((e: any) => res.send('Unable to connect to the database:' + e));
 });
 
-routes.post('/funcionarios/cadastro', (req, res) => {
+routesFuncionairos.post('/funcionarios/cadastro', (req, res) => {
   connection
     .authenticate()
     .then(async () => {
@@ -54,4 +54,4 @@ routes.post('/funcionarios/cadastro', (req, res) => {
     .catch((e: any) => res.send('Unable to connect to the database:' + e));
 });
 
-export default routes;
+export default routesFuncionairos;
