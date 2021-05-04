@@ -1,27 +1,31 @@
 import express from 'express';
 import connection from '../database/index.js';
-import { Funcionario } from '../models/Funcionario.js';
+import { Funcionario, FuncionarioI } from '../models/Funcionario.js';
+import dotEnv from 'dotenv-safe';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 const routes = express.Router();
 
-routes.get('/', (req, res) => {
-  //Tenta conectar ao banco e retorna o resultado para o cliente
+routes.post('/login', (req, res) => {
+  dotEnv.config();
   connection
     .authenticate()
     .then(async () => {
-      console.log('Connection has been established successfully.');
-      try {
-        await Funcionario.build({
-          cpf: '46879049800',
-          nome: 'Pedro Siqueira',
-          dataCadastro: '2021-05-02',
-          email: 'pedro@bol.com',
-          senha: '123456',
-        }).save();
-        const funcList = await Funcionario.findAll();
-        funcList.map(v => console.log(v));
-      } catch (e) {
-        console.log(e);
+      const { email, senha } = req.body as FuncionarioI;
+      const funcionario = await Funcionario.findOne({
+        where: {
+          'email': email
+        }
+      });
+      if (funcionario) {
+        const match = bcrypt.compare(senha, funcionario.senha);
+        if (match) {
+          const token = jwt.sign({ cpf: funcionario.cpf }, process.env.SECRET!, {
+            expiresIn: 300 // expires in 5min
+          });
+          res.json({ auth: true, token: token });
+        }
       }
     })
     .catch((e: any) => res.send('Unable to connect to the database:' + e));
