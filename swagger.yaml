@@ -1,0 +1,452 @@
+openapi: 3.0.1
+info:
+  title: Timetracker API
+  description: Serviço de controle de horas
+  version: 0.0.1
+  contact:
+    name: "Equipe TimeTracker"
+    url: "https://github.com/PedroSeabra/TimeTracker-API"
+servers:
+  - url: /
+
+paths:
+  '/auth/autenticar':
+    post:
+      tags: [Auth]
+      summary: Autentica um funcionário com credenciais válidas
+      description: Realiza a autenticação de um funcionário a partir de suas credencias
+      operationId: autenticarFuncionario
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Funcionario'
+      responses:
+        204:
+          description: Cadastro efetuado com sucesso
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  auth:
+                    type: boolean
+                  token:
+                    type: string
+        400:
+          description: Requisição inválida
+        500:
+          description: Erro interno no servidor
+          
+  '/auth/recuperar-senha/enviar-email':
+    post:
+      tags: [Auth]
+      summary: Envia email de recuperação de senha
+      description: Envia email para recuperação de senha do funcionário
+      operationId: enviarEmailRecuperacaoSenha
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+      responses:
+        204:
+          description: Email enviado com sucesso
+        400:
+          description: Paramêtros inválidos
+        500:
+          description: Erro interno no servidor
+          
+  '/auth/recuperar-senha/alterar':
+    post:
+      tags: [Auth]
+      summary: Realiza a alteração da senha
+      description: Realiza a alteração da senha de acesso do funcionário
+      operationId: alterarSenha
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  pattern: email
+                novaSenha:
+                  type: string
+                  pattern: password
+                token:
+                  type: string
+      responses:
+        201:
+          description: Cadastro efetuado com sucesso
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Funcionario'
+        400:
+          description: Paramêtros inválidos
+        403:
+          description: Essa operação não é permitida, token inválido          
+        500:
+          description: Erro interno no servidor
+
+  '/funcionarios':
+    get:
+      tags: [Funcionarios]
+      summary: Listar funcionários
+      description: Retorna a lista de todos os funcionários cadastrados
+      operationId: listarFuncionarios
+      responses:
+        200:
+          description: Busca efetuada com sucesso
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Funcionario'
+        400:
+          description: Requisição inválida
+        401:
+          description: Você não está autênticado
+        403:
+          description: Essa operação não é permitida
+        500:
+          description: Erro interno no servidor
+          
+  '/funcionarios/cadastrar':
+    post:
+      tags: [Funcionarios]
+      summary: Cadastrar funcionário
+      description: Cadastra um novo funcionário
+      operationId: cadastrarFuncionario
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Funcionario'
+      responses:
+        201:
+          description: Cadastro efetuado com sucesso
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Funcionario'
+        400:
+          description: Paramêtros inválidos
+        401:
+          description: Você não está autênticado
+        403:
+          description: Essa operação não é permitida          
+        500:
+          description: Erro interno no servidor
+          
+  '/funcionarios/{email}':
+    get:
+      tags: [Funcionarios]
+      summary: Recuperar funcionário
+      description: Busca um funcionário por email
+      operationId: buscarFuncionario
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: email
+      responses:
+        200:
+          description: Usuário encontrado com sucesso
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Funcionario'
+        400:
+          description: Requisição inválida
+        401:
+          description: Você não está autênticado
+        403:
+          description: Essa operação não é permitida          
+        500:
+          description: Erro interno no servidor
+    put:
+      tags: [Funcionarios]
+      summary: Alterar funcionário
+      description: Altera os dados do funcionário
+      operationId: alterarFuncionario
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: email
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Funcionario'
+      responses:
+        200:
+          description: Alteração efetuada com sucesso
+          content: 
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Funcionario'
+        400:
+          description: Requisição inválida
+        401:
+          description: Você não está autênticado
+        403:
+          description: Essa operação não é permitida          
+        500:
+          description: Erro interno no servidor
+          
+  '/tarefas':
+    get:
+      tags: [Tarefas]
+      summary: Listar tarefas
+      description: Retorna a lista de todas as tarefas cadastradas
+      operationId: listarTarefas
+      responses:
+        200:
+          description: Busca efetuada com sucesso
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tarefa'
+        400:
+          description: Requisição inválida
+        401:
+          description: Você não está autênticado
+        403:
+          description: Essa operação não é permitida          
+        500:
+          description: Erro interno no servidor  
+
+  '/tarefas/cadastrar':          
+    post:
+      tags: [Tarefas]
+      summary: Cadastrar tarefa
+      description: Cadastra uma nova tarefa
+      operationId: cadastrarTarefa
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tarefa'
+      responses:
+        201:
+          description: Cadastro efetuado com sucesso
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tarefa'
+        400:
+          description: Paramêtros inválidos
+        401:
+          description: Você não está autênticado
+        403:
+          description: Essa operação não é permitida          
+        500:
+          description: Erro interno no servidor   
+          
+  '/tarefas/{codTarefa}':
+    get:
+      tags: [Tarefas]
+      summary: Recuperar tarefa
+      description: Busca uma tarefa pelo seu código
+      operationId: buscarTarefa
+      parameters:
+        - name: codTarefa
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        200:
+          description: Tarefa encontrada com sucesso
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Funcionario'
+        400:
+          description: Requisição inválida
+        401:
+          description: Você não está autênticado
+        403:
+          description: Essa operação não é permitida          
+        500:
+          description: Erro interno no servidor
+    put:
+      tags: [Tarefas]
+      summary: Alterar tarefa
+      description: Altera os dados da tarefa
+      operationId: alterarTarefa
+      parameters:
+        - name: codTarefa
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tarefa'
+      responses:
+        200:
+          description: Alteração efetuada com sucesso
+          content: 
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Tarefa'
+        400:
+          description: Requisição inválida
+        401:
+          description: Você não está autênticado
+        403:
+          description: Essa operação não é permitida
+        500:
+          description: Erro interno no servidor        
+          
+  '/{codTarefa}/registrar-atividade':
+    post:
+      tags: [Tarefas]
+      summary: Registrar atividade
+      description: Registra nova atividade
+      operationId: adicionarAtividade
+      parameters:
+        - name: codTarefa
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tipoRegistro:
+                  type: string
+                  pattern: '^inicio$|^fim$'
+      responses:
+        201:
+          description: Registro efetuado com sucesso
+          content: 
+            application/json:
+              schema:
+                  type: string
+                  format: date-time
+        400:
+          description: Parâmetros inválidos
+        401:
+          description: Você não está autênticado
+        403:
+          description: Essa operação não é permitida
+        500:
+          description: Erro interno no servidor                  
+          
+  '/{codTarefa}/atribuir-responsavel':
+    post:
+      tags: [Tarefas]
+      summary: Atribuir responsável pela tarefa
+      description: Atribui um responsável pela realização da tarefa
+      operationId: atribuirResponsavel
+      parameters:
+        - name: codTarefa
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                responsavel:
+                  type: string
+                atribuidoPor:
+                  type: string
+      responses:
+        204:
+          description: Responsável atribuído com sucesso
+        400:
+          description: Parâmetros inválidos
+        401:
+          description: Você não está autênticado
+        403:
+          description: Essa operação não é permitida
+        500:
+          description: Erro interno no servidor              
+          
+components:
+  schemas:
+    Funcionario:
+      allOf:
+        - $ref: '#/components/schemas/Credenciais'
+        - type: object
+          properties:
+            cpf:
+              type: string
+              minLength: 11
+              maxLength: 11
+              example: 12345678900
+            nome:
+              type: string
+              example: Fulano de Tal e Qual
+            dataCadastro:
+              type: string
+              pattern: date
+              example: '2020-06-13'
+    Credenciais:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: time@tracker.com
+        senha:
+          type: string
+          format: password
+          example: senha123
+    Tarefa:
+      type: object
+      properties:
+        codTarefa:
+          type: number
+          example: 99
+        codSprint:
+          type: number
+          example: 99
+        nome:
+          type: string
+          example: Cadastrar tal coisa
+        descricao:
+          type: string
+          example: Deve permitir o cadastro de tal coisa no sistema
+        tempoEstimado:
+          type: string
+          pattern: time
+          example: 01:26
+        dataEntrega:
+          type: string
+          pattern: date
+          example: 2021-06-17          
+        status:
+          type: number
+          pattern: '[0-5]'
+          example: 3
+        responsavel:
+          type: string
+          minLength: 11
+          maxLength: 11
+          example: 12345678900
