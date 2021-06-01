@@ -1,5 +1,8 @@
-import { TarefaModel } from '../models/TarefaModel.js';
 import { Exception } from '../utils/Errors.js';
+import {
+  TarefaI,
+  TarefaModel as Tarefa,
+} from '../models/TarefaModel.js';
 
 export class TarefaController {
   static listar = async (req: any, res: any) => {
@@ -19,7 +22,7 @@ export class TarefaController {
 
   static cadastrar = async (req: any, res: any) => {
     try {
-      const novaTarefa = await new TarefaModel(req.body);
+      const novaTarefa = await new Tarefa(req.body);
       await novaTarefa.cadastrar();
       res.json(novaTarefa);
     } catch (e) {
@@ -36,7 +39,8 @@ export class TarefaController {
 
   static buscarPorCodigo = async (req: any, res: any) => {
     try {
-      //implementar
+      const tarefa = await Tarefa.buscarPorCodigo(req.params.codigoTarefa);
+      res.json(tarefa);
     } catch (e) {
       console.log(e);
       if (e instanceof Exception) {
@@ -51,7 +55,9 @@ export class TarefaController {
 
   static alterar = async (req: any, res: any) => {
     try {
-      //implementar
+      const novaTarefa = await new Tarefa(req.body as TarefaI);
+      novaTarefa.alterar(req.params.email);
+      res.json(novaTarefa);
     } catch (e) {
       console.log(e);
       if (e instanceof Exception) {

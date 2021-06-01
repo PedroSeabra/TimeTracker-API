@@ -1,6 +1,9 @@
-import { TarefaDAO } from '../DAOs/TarefaDAO.js';
-import { InvalidParametersException } from '../utils/Errors.js';
 import { FuncionarioI } from './FuncionarioModel.js';
+import { TarefaDAO } from '../DAOs/TarefaDAO.js';
+import {
+  InvalidParametersException,
+  NotFoundException,
+} from '../utils/Errors.js';
 
 export interface TarefaI {
   codTarefa: number;
@@ -34,9 +37,22 @@ export class TarefaModel implements TarefaI {
     this.responsavel = tarefa.responsavel;
   }
 
+  static async buscarPorCodigo(codigo: number, camposFiltrados?: string[]) {
+    let tarefa = await TarefaDAO.buscarPorCodigo(codigo);
+    if (!tarefa) throw new NotFoundException('O usuário');
+    else return new TarefaModel(tarefa as TarefaI);
+  }
+
   cadastrar = async () => {
     if (!this.codTarefa || !this.codSprint || !this.nome)
       throw new InvalidParametersException();
     await TarefaDAO.cadastrar(this);
+  };
+
+  alterar = async (codigo: number) => {
+    if (!TarefaDAO.buscarPorCodigo(codigo)) {
+      throw new NotFoundException('A tarefa não existe');
+    }
+    await TarefaDAO.alterar(this, codigo);
   };
 }
