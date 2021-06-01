@@ -7,7 +7,7 @@ import {
 export class TarefaController {
   static listar = async (req: any, res: any) => {
     try {
-      const listaFuncionarios = await TarefaModel.listar();
+      const listaFuncionarios = await Tarefa.listar();
       res.json(listaFuncionarios);
     } catch (e) {
       console.log(e);
@@ -57,7 +57,8 @@ export class TarefaController {
   static alterar = async (req: any, res: any) => {
     try {
       const novaTarefa = await new Tarefa(req.body as TarefaI);
-      novaTarefa.alterar(req.params.email);
+      novaTarefa.alterar(req.params.codTarefa);
+      console.log(req.params.codTarefa)
       res.json(novaTarefa);
     } catch (e) {
       console.log(e);
