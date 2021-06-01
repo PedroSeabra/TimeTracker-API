@@ -42,9 +42,11 @@ export class FuncionarioDAO {
       });
   };
 
-  static alterar = async (funcionario: FuncionarioI) => {
+  static alterar = async (funcionario: FuncionarioI, funcionarioEmail: string) => {
     return await _FuncionarioDAO
-      .update(funcionario, { where: { cpf: funcionario.cpf } })
+      .update(funcionario, {
+        where: { email: funcionarioEmail }
+      })
       .then(queryInfo => queryInfo[0])
       .catch(e => {
         console.log('db-error: ', e);
@@ -53,7 +55,7 @@ export class FuncionarioDAO {
   };
 }
 
-class _FuncionarioDAO extends Model {}
+class _FuncionarioDAO extends Model { }
 
 _FuncionarioDAO.init(
   {

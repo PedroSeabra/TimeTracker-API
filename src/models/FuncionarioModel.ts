@@ -56,10 +56,12 @@ export class FuncionarioModel implements FuncionarioI {
     await FuncionarioDAO.cadastrar(this);
   };
 
-  alterar = async () => {
-    if (!FuncionarioModel.buscarPorEmail(this.email))
+  alterar = async (email: string) => {
+    if (!FuncionarioDAO.buscarPorEmail(email)) {
       throw new NotFoundException('O usuário não existe');
+    }
     this.senha = await gerarSenha(this.senha);
-    await FuncionarioDAO.alterar(this);
+    const teste = await FuncionarioDAO.alterar(this, email);
+    console.log(teste)
   };
 }
