@@ -36,7 +36,7 @@ export class AuthController {
       const { email } = req.body;
       await Funcionario.buscarPorEmail(email);
       //Se existe o email fornecido, cadastra o token
-      const token = await AuthModel.cadastrarTokenRecuperacaoSenha(email);
+      const token = await AuthModel.cadastrarTokenRecuperacaoSenhaI(email);
       const mailer = new Mailer(
         process.env.EMAIL_USER!,
         process.env.EMAIL_PASS!
@@ -63,7 +63,7 @@ export class AuthController {
     try {
       const { token, email, novaSenha } = req.body;
       const { email: emailSolicitante } =
-        await AuthModel.buscarTokenRecuperacaoSenha(token);
+        await AuthModel.buscarTokenRecuperacaoSenhaI(token);
       if (emailSolicitante !== email) throw new InvalidParametersException();
       const funcionario = await Funcionario.buscarPorEmail(email);
       if (funcionario) {
