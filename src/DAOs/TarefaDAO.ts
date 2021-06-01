@@ -17,6 +17,11 @@ export class TarefaDAO {
         throw new DatabaseException();
       });
   };
+
+  static listar = async () => {
+    let tarefas = await _TarefaDAO.findAll();
+    return tarefas.map(tarefa => tarefa.toJSON());
+  };
 }
 
 class _TarefaDAO extends Model {}

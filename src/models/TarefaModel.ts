@@ -39,4 +39,9 @@ export class TarefaModel implements TarefaI {
       throw new InvalidParametersException();
     await TarefaDAO.cadastrar(this);
   };
+
+  static listar = async () => {
+    let listaTarefas = await TarefaDAO.listar();
+    return listaTarefas?.map(tarefa => new TarefaModel(tarefa as TarefaI));
+  };
 }

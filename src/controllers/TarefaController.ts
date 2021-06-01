@@ -4,7 +4,8 @@ import { Exception } from '../utils/Errors.js';
 export class TarefaController {
   static listar = async (req: any, res: any) => {
     try {
-      //implementar
+      const listaFuncionarios = await TarefaModel.listar();
+      res.json(listaFuncionarios);
     } catch (e) {
       console.log(e);
       if (e instanceof Exception) {
