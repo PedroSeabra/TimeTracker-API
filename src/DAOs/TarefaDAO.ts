@@ -1,17 +1,17 @@
 import sequelize from 'sequelize';
-import { TokenRecuperacaoSenha } from '../models/AuthModel.js';
 import connection from '../database/index.js';
 import { DatabaseException } from '../utils/Errors.js';
-import { _FuncionarioDAO } from './FuncionarioDAO';
+import { _FuncionarioDAO } from './FuncionarioDAO.js';
+import { TarefaI } from '../models/TarefaModel.js';
 
 const { STRING, DATE, Model, INTEGER, TIME } = sequelize;
 
 export class TarefaDAO {
-  static cadastrarTarefa = async (tarefa: TokenRecuperacaoSenha) => {
+  static cadastrar = async (tarefa: TarefaI) => {
     return await _TarefaDAO
       .build(tarefa)
       .save()
-      .then(novoToken => novoToken.toJSON())
+      .then(novaTarefa => novaTarefa.toJSON())
       .catch(e => {
         console.log('db-error: ', e);
         throw new DatabaseException();
@@ -20,13 +20,6 @@ export class TarefaDAO {
 }
 
 class _TarefaDAO extends Model {}
-
-_TarefaDAO.belongsTo(_FuncionarioDAO, {
-  foreignKey: {
-    name: 'responsavel',
-    allowNull: true,
-  },
-});
 
 _TarefaDAO.init(
   {
@@ -68,3 +61,10 @@ _TarefaDAO.init(
     timestamps: false,
   }
 );
+
+_TarefaDAO.belongsTo(_FuncionarioDAO, {
+  foreignKey: {
+    name: 'responsavel',
+    allowNull: true,
+  },
+});
