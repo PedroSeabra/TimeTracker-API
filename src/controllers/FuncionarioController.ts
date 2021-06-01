@@ -47,7 +47,7 @@ export class FuncionarioController {
       const funcionario = await Funcionario.buscarPorEmail(req.params.email);
       res.json(funcionario);
     } catch (e) {
-      console.log(e);
+      // console.log(e);
       if (e instanceof Exception) {
         res.status(e.status);
         res.send(e.message);
@@ -60,7 +60,7 @@ export class FuncionarioController {
   static alterar = async (req: any, res: any) => {
     try {
       const novoFuncionario = await new Funcionario(req.body as FuncionarioI);
-      novoFuncionario.alterar();
+      novoFuncionario.alterar(req.params.email);
       res.json(novoFuncionario);
     } catch (e) {
       console.log(e);

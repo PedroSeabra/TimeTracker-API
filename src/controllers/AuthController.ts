@@ -68,7 +68,7 @@ export class AuthController {
       const funcionario = await Funcionario.buscarPorEmail(email);
       if (funcionario) {
         funcionario.senha = novaSenha;
-        await funcionario.alterar();
+        await funcionario.alterar(email);
       }
       res.send();
     } catch (e) {
