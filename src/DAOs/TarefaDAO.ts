@@ -18,13 +18,58 @@ export class TarefaDAO {
       });
   };
 
+  static buscarPorCodigo = async (codigo: number) => {
+    let tarefaEncontrada = await _TarefaDAO.findOne({
+      where: {
+        codTarefa: codigo,
+      },
+    });
+    if (tarefaEncontrada) return tarefaEncontrada.toJSON();
+    else return null;
+  };
+
+  static alterar = async (tarefa: TarefaI, codigo: number) => {
+    return await _TarefaDAO
+      .update(tarefa, {
+        where: { codTarefa: codigo }
+      })
+      .then(queryInfo => queryInfo[0])
+      .catch(e => {
+        console.log('db-error: ', e);
+        throw new DatabaseException();
+      });
+  };
+
+
   static listar = async () => {
     let tarefas = await _TarefaDAO.findAll();
     return tarefas.map(tarefa => tarefa.toJSON());
   };
+  static buscarPorCodigo = async (codigo: number) => {
+    let tarefaEncontrada = await _TarefaDAO.findOne({
+      where: {
+        codTarefa: codigo,
+      },
+    });
+    if (tarefaEncontrada) return tarefaEncontrada.toJSON();
+    else return null;
+  };
+
+  static alterar = async (tarefa: TarefaI, codigo: number) => {
+    return await _TarefaDAO
+      .update(tarefa, {
+        where: { codTarefa: codigo }
+      })
+      .then(queryInfo => queryInfo[0])
+      .catch(e => {
+        console.log('db-error: ', e);
+        throw new DatabaseException();
+      });
+  };
+
 }
 
-class _TarefaDAO extends Model {}
+class _TarefaDAO extends Model { }
 
 _TarefaDAO.init(
   {
