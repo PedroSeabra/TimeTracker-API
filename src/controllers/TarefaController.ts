@@ -112,7 +112,11 @@ export class TarefaController {
 
   static atribuirResponsavel = async (req: any, res: any) => {
     try {
-      //implementar
+      const tarefa = await new Tarefa(req.body as TarefaI);
+      tarefa.alterar(req.params.codTarefa);
+      // console.log(req.params.codTarefa)
+      res.status(200);
+      res.send('Responsável atribuído com sucesso.');
     } catch (e) {
       console.log(e);
       if (e instanceof Exception) {
