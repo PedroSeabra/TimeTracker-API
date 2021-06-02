@@ -40,7 +40,7 @@ export class TarefaController {
 
   static buscarPorCodigo = async (req: any, res: any) => {
     try {
-      const tarefa = await Tarefa.buscarPorCodigo(req.params.codigoTarefa);
+      const tarefa = await Tarefa.buscarPorCodigo(req.params.codTarefa);
       res.json(tarefa);
     } catch (e) {
       console.log(e);

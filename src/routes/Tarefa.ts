@@ -15,6 +15,7 @@ const {
 routes.route('/').get(listar);
 //Rotas para recuperação de senha
 routes.route('/cadastrar').post(cadastrar);
+routes.route('/:codTarefa').get(buscarPorCodigo);
 routes.route('/:codTarefa').get(buscarPorCodigo).put(alterar);
 routes.route('/:codTarefa').get(buscarPorCodigo).delete(apagar);
 routes.route('/:codTarefa/registrar-atividade').post(registrarAtividade);
