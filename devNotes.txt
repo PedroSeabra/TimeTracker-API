@@ -1,5 +1,9 @@
 --- É preciso usar node v14.5
+
 --- Por conta do setup com typecript, é preciso que as migrations estejam no formato cjs
+
+--- Todos os imports devem usar .js no final, e devem ser relativos
+
 --- Criar arquivo .env.example e .env
 #Formato de .env.example : CHAVE=, para cada variavel de ambiente por linha
 #Formato .env : CHAVE=VALOR, para cada variavel de ambiente por linha

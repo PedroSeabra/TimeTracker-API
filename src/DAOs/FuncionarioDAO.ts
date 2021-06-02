@@ -55,7 +55,7 @@ export class FuncionarioDAO {
   };
 }
 
-class _FuncionarioDAO extends Model { }
+export class _FuncionarioDAO extends Model {}
 
 _FuncionarioDAO.init(
   {

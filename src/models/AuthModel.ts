@@ -2,14 +2,14 @@ import { ExpiredTokenException } from '../utils/Errors.js';
 import { AuthDAO } from '../DAOs/AuthDAO.js';
 import { gerarTokenOpaco } from '../utils/auth.js';
 
-export interface TokenRecuperacaoSenha {
+export interface TokenRecuperacaoSenhaI {
   token: string;
   email: string;
   dataExpiracao: string;
 }
 
 export class AuthModel {
-  static cadastrarTokenRecuperacaoSenha = async (email: string) => {
+  static cadastrarTokenRecuperacaoSenhaI = async (email: string) => {
     await AuthDAO.invalidarTokensSenhaPorEmail(email);
     const dataExpiracao = new Date(Date.now() + 1800 * 1000);
     return (await AuthDAO.cadastrarTokenSenha({
@@ -19,10 +19,10 @@ export class AuthModel {
         ' ' +
         dataExpiracao.toLocaleTimeString(),
       email,
-    })) as TokenRecuperacaoSenha;
+    })) as TokenRecuperacaoSenhaI;
   };
 
-  static buscarTokenRecuperacaoSenha = async (tokenFornecido: string) => {
+  static buscarTokenRecuperacaoSenhaI = async (tokenFornecido: string) => {
     const token = await AuthDAO.buscarTokenSenha(tokenFornecido);
     if (new Date(token.dataExpiracao) > new Date())
       throw new ExpiredTokenException();

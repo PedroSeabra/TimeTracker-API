@@ -1,5 +1,5 @@
 import sequelize from 'sequelize';
-import { TokenRecuperacaoSenha } from '../models/AuthModel.js';
+import { TokenRecuperacaoSenhaI } from '../models/AuthModel.js';
 import connection from '../database/index.js';
 import { DatabaseException, InvalidTokenException } from '../utils/Errors.js';
 
@@ -13,7 +13,7 @@ export class AuthDAO {
       },
     });
     if (!responseToken) throw new InvalidTokenException();
-    else return responseToken.toJSON() as TokenRecuperacaoSenha;
+    else return responseToken.toJSON() as TokenRecuperacaoSenhaI;
   };
 
   static invalidarTokensSenhaPorEmail = async (email: string) => {
@@ -24,7 +24,7 @@ export class AuthDAO {
     });
   };
 
-  static cadastrarTokenSenha = async (token: TokenRecuperacaoSenha) => {
+  static cadastrarTokenSenha = async (token: TokenRecuperacaoSenhaI) => {
     return await _TokenSenhaDAO
       .build(token)
       .save()
