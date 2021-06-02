@@ -77,7 +77,8 @@ export class TarefaController {
       const tarefa = await Tarefa.buscarPorCodigo(req.params.codTarefa);
       if (tarefa) {
         tarefa.apagar(req.params.codTarefa);
-        res.json(tarefa);
+        res.status(200);
+        res.send('Tarefa apagada com sucesso.');
       } else {
         res.status(500);
         res.send('erro desconhecido');
