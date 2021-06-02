@@ -72,6 +72,29 @@ export class TarefaController {
     }
   };
 
+  static apagar = async (req: any, res: any) => {
+    try {
+      const tarefa = await Tarefa.buscarPorCodigo(req.params.codTarefa);
+      if (tarefa) {
+        tarefa.apagar(req.params.codTarefa);
+        res.status(200);
+        res.send('Tarefa apagada com sucesso.');
+      } else {
+        res.status(500);
+        res.send('erro desconhecido');
+      }
+    } catch (e) {
+      console.log(e);
+      if (e instanceof Exception) {
+        res.status(e.status);
+        res.send(e.message);
+      } else {
+        res.status(500);
+        res.send('erro desconhecido');
+      }
+    }
+  };
+
   static registrarAtividade = async (req: any, res: any) => {
     try {
       //implementar

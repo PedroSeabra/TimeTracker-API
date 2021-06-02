@@ -39,7 +39,7 @@ export class TarefaModel implements TarefaI {
 
   static async buscarPorCodigo(codigo: number, camposFiltrados?: string[]) {
     let tarefa = await TarefaDAO.buscarPorCodigo(codigo);
-    if (!tarefa) throw new NotFoundException('O usuário');
+    if (!tarefa) throw new NotFoundException('A tarefa');
     else return new TarefaModel(tarefa as TarefaI);
   }
 
@@ -59,5 +59,12 @@ export class TarefaModel implements TarefaI {
       throw new NotFoundException('A tarefa não existe');
     }
     await TarefaDAO.alterar(this, codigo);
+  };
+
+  apagar = async (codigo: number) => {
+    if (!TarefaDAO.buscarPorCodigo(codigo)) {
+      throw new NotFoundException('A tarefa não existe');
+    }
+    await TarefaDAO.apagar(codigo);
   };
 }
